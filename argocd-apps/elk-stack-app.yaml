@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: elk-stack
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/MNgouhouo/warrios-group.git
+    targetRevision: HEAD  # You can specify a branch or tag here, e.g., "main" or "v1.0"
+    path: .  # Make sure the path points to the directory where your Kubernetes manifests or Helm charts are located
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: elk-demo  # The namespace where this application will be deployed
+  syncPolicy:
+    automated:
+      prune: true  # Automatically prune resources that are no longer tracked by the repo
+      selfHeal: true  # Automatically sync resources if they drift from the desired state
+    syncOptions:
+      - CreateNamespace=true  # Automatically create the namespace if it does not exist
+
